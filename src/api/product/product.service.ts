@@ -20,6 +20,16 @@ export const add = async (product: IProduct) => {
   }
 };
 
+export const update = async (product: IProduct) => {
+  try {
+    return knex(tableName)
+      .update(product)
+      .where({ asin: product.asin, locale: product.locale });
+  } catch (e) {
+    console.error(`something went wrong while updating a product\n ${e}`);
+  }
+};
+
 export const getByAsinLocale = async (
   asin: string,
   locale: string

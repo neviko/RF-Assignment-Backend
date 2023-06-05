@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import {
   add,
+  update,
   getAllAvailableBySeller,
   getByAsinLocale,
 } from "./product.service";
@@ -28,6 +29,20 @@ export const getProductByAsinLocale = async (req: Request, res: Response) => {
   try {
     const product = await getByAsinLocale(asin as string, locale as string);
     res.status(StatusCodes.OK).send(product);
+  } catch (e) {
+    res.status(StatusCodes.BAD_REQUEST);
+  }
+};
+
+/**
+ *
+ * @param we are assuming that we receive the whole product object
+ */
+export const updateProduct = async (req: Request, res: Response) => {
+  const product: IProduct = req.body;
+  try {
+    await update(product);
+    res.status(StatusCodes.CREATED).send(product);
   } catch (e) {
     res.status(StatusCodes.BAD_REQUEST);
   }
