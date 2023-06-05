@@ -2,21 +2,44 @@ import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 
-export const addBookValidator = () => {
+export const addProductValidator = () => {
   return [
-    body("name")
+    body("asin")
       .isString()
       .withMessage("name property have to be valid")
       .notEmpty(),
 
-    body("id")
+    body("locale")
       .isString()
-      .notEmpty()
-      .withMessage("id property have to be valid"),
-    body("author")
+      .withMessage("id property have to be valid")
+      .notEmpty(),
+
+    body("seller_name")
       .isString()
-      .optional()
-      .withMessage("author property have to be valid"),
+      .withMessage("author property have to be valid")
+      .notEmpty(),
+
+    body("availability")
+      .isBoolean()
+      .withMessage("availability property have to be valid")
+      .notEmpty(),
+
+    body("price")
+      .isFloat({ min: 0, max: 9999999 })
+      .withMessage("price property have to be valid")
+      .notEmpty(),
+
+    body("name")
+      .isString()
+      .withMessage("seller_name property have to be valid")
+      .notEmpty(),
+
+    body("link")
+      .isString()
+      .isURL()
+      .withMessage("link property have to be valid")
+      .notEmpty(),
+
     (req: Request, res: Response, next: NextFunction) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {

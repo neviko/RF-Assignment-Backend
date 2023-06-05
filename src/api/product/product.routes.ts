@@ -1,10 +1,10 @@
 import express from "express";
-import { getBooks, addBook } from "./product.handler";
-import { addBookValidator } from "./product.validators";
+import { addProduct } from "./product.controller";
+import { addProductValidator } from "./product.validators";
 
 const router = express.Router();
 
-router.get("/", getBooks);
-router.post("/", addBookValidator(), addBook);
+router.get("/");
+router.post("/", addProductValidator(), addProduct);
 
-export { router as booksRouter }; // or ES6
+export { router as productsRouter }; // or ES6

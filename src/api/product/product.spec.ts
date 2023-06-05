@@ -1,22 +1,47 @@
 import request from "supertest";
 import { app } from "../../app";
+import { IProduct } from "../../common/interfaces/IProduct";
+import { StatusCodes } from "http-status-codes";
+import { generateProduct } from "./product.helper";
 
-describe("global testing", () => {
-  it("test should pass", async () => {
-    expect(1 + 1).toBe(2);
+describe("adding product suite", () => {
+  it("should insert product into db", async () => {
+    const product: IProduct = generateProduct();
+
+    return request(app)
+      .post("/api/products")
+      .send(product)
+      .expect(StatusCodes.CREATED);
   });
 
-  it("should return status 200", async () => {
-    return request(app).get("/api/books").expect(200);
+  it("should be FAILED - insert product into db", async () => {
+    const product: IProduct = generateProduct();
+    product.name = "";
+
+    return request(app)
+      .post("/api/products")
+      .send(product)
+      .expect(StatusCodes.BAD_REQUEST);
+  });
+});
+
+describe("adding product suite", () => {
+  it("should insert product into db", async () => {
+    const product: IProduct = generateProduct();
+
+    return request(app)
+      .post("/api/products")
+      .send(product)
+      .expect(StatusCodes.CREATED);
   });
 
-  it("should NOT find the route", async () => {
-    const res = await request(app).get("/api/books");
-    expect(res.statusCode).not.toEqual(404);
-  });
+  it("should be FAILED - insert product into db", async () => {
+    const product: IProduct = generateProduct();
+    product.name = "";
 
-  it("should call to addBook and failed", async () => {
-    const res = await request(app).post("/api/books");
-    expect(res.statusCode).toEqual(400);
+    return request(app)
+      .post("/api/products")
+      .send(product)
+      .expect(StatusCodes.BAD_REQUEST);
   });
 });
