@@ -19,3 +19,19 @@ export const add = async (product: IProduct) => {
     console.error(`something went wrong while inserting a product\n ${e}`);
   }
 };
+
+export const getByAsinLocale = async (
+  asin: string,
+  locale: string
+): Promise<IProduct | undefined> => {
+  try {
+    const products = await knex(tableName)
+      .select("*")
+      .where({ asin, locale })
+      .limit(1);
+    console.log(products);
+    return products[0];
+  } catch (e) {
+    console.error(`something went wrong while fetching a product\n ${e}`);
+  }
+};

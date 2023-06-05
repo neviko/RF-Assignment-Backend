@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { add, getAllAvailableBySeller } from "./product.service";
+import {
+  add,
+  getAllAvailableBySeller,
+  getByAsinLocale,
+} from "./product.service";
 import { IProduct } from "../../common/interfaces/IProduct";
 
 export const getProducts = async (req: Request, res: Response) => {
@@ -14,6 +18,16 @@ export const addProduct = async (req: Request, res: Response) => {
   try {
     await add(product);
     res.status(StatusCodes.CREATED).send(product);
+  } catch (e) {
+    res.status(StatusCodes.BAD_REQUEST);
+  }
+};
+
+export const getProductByAsinLocale = async (req: Request, res: Response) => {
+  const { asin, locale } = req.query;
+  try {
+    const product = await getByAsinLocale(asin as string, locale as string);
+    res.status(StatusCodes.OK).send(product);
   } catch (e) {
     res.status(StatusCodes.BAD_REQUEST);
   }
