@@ -1,8 +1,8 @@
 import { Knex } from "knex";
 // import fs from "fs";
 // import readline from "readline";
-import { IProduct } from "../../common/interfaces/IProduct";
-import { generateProduct } from "../../api/product/product.helper";
+import { IProduct } from "../../src/common/interfaces/IProduct";
+import { generateProduct } from "../../src/api/product/product.helper";
 
 const tableName = "products";
 

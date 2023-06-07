@@ -5,6 +5,7 @@ import {
   update,
   getAllAvailableBySeller,
   getByAsinLocale,
+  deleteBatch,
 } from "./product.service";
 import { IProduct } from "../../common/interfaces/IProduct";
 
@@ -43,6 +44,16 @@ export const updateProduct = async (req: Request, res: Response) => {
   try {
     await update(product);
     res.status(StatusCodes.CREATED).send(product);
+  } catch (e) {
+    res.status(StatusCodes.BAD_REQUEST);
+  }
+};
+
+export const deleteBatchProducts = async (req: Request, res: Response) => {
+  const products = req.body as IProduct[];
+  try {
+    await deleteBatch(products);
+    res.status(StatusCodes.CREATED).send({});
   } catch (e) {
     res.status(StatusCodes.BAD_REQUEST);
   }

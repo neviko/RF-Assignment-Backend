@@ -43,23 +43,23 @@ describe("get seller product by <asin,locale> - GET", () => {
       })
       .expect(StatusCodes.OK);
   });
-});
 
-it("should failed /GET - asin missing", async () => {
-  const newProduct: IProduct = generateProduct();
-  const { locale } = newProduct;
+  it("should failed /GET - asin missing", async () => {
+    const newProduct: IProduct = generateProduct();
+    const { locale } = newProduct;
 
-  await request(app)
-    .post("/api/products")
-    .send(newProduct)
-    .expect(StatusCodes.CREATED);
+    await request(app)
+      .post("/api/products")
+      .send(newProduct)
+      .expect(StatusCodes.CREATED);
 
-  return request(app)
-    .get("/api/products")
-    .query({
-      locale,
-    })
-    .expect(StatusCodes.BAD_REQUEST);
+    return request(app)
+      .get("/api/products")
+      .query({
+        locale,
+      })
+      .expect(StatusCodes.BAD_REQUEST);
+  });
 });
 
 describe("update product suite", () => {
@@ -93,3 +93,41 @@ describe("update product suite", () => {
       .expect(StatusCodes.BAD_REQUEST);
   });
 });
+
+// describe("delete product suite", () => {
+//   it("should delete products", async () => {
+//     const products: IProduct[] = [];
+//     for (let i = 0; i < 20; i++) {
+//       const product: IProduct = generateProduct();
+//       products.push(product);
+//     }
+
+//     await request(app)
+//       .delete("/api/products")
+//       .send()
+//       .expect(StatusCodes.CREATED);
+
+//     const updatedProduct = product;
+//     const newName = "Nevo";
+//     updatedProduct.name = newName;
+
+//     const res = await request(app)
+//       .put("/api/products")
+//       .send(updatedProduct)
+//       .expect(StatusCodes.CREATED);
+
+//     expect(res.body.name).toEqual(newName);
+//   });
+
+//   it("should be FAILED - update product", async () => {
+//     const product: IProduct = generateProduct();
+//     product.name = "";
+
+//     return request(app)
+//       .put("/api/products")
+//       .send(product)
+//       .expect(StatusCodes.BAD_REQUEST);
+//   });
+// });
+
+// describe("delete product suite", () => {});

@@ -71,6 +71,38 @@ export const getProductByAsinLocaleValidator = () => {
   ];
 };
 
+export const deleteProductsValidator = () => {
+  interface IAsinLocale {
+    asin: string;
+    locale: string;
+  }
+
+  return [
+    body("products")
+      .isArray({ min: 1 })
+      .withMessage("products have to be valid array")
+      .custom((products: IAsinLocale[]) => {
+        products.forEach((product) => {
+          if (!product.asin || !product.locale) {
+            throw new Error(
+              "products have to be valid array of pairs <asin,locale>"
+            );
+          }
+        });
+      }),
+    (req: Request, res: Response, next: NextFunction) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          StatusCode: StatusCodes.BAD_REQUEST,
+          errors: errors.array(),
+        });
+      }
+      next();
+    },
+  ];
+};
+
 //TODO: insert validateErrors instead od reusable code
 const validateErrors = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);

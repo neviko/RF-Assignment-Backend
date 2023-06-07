@@ -11,6 +11,7 @@ export async function up(knex: Knex): Promise<void> {
     table.float("price").notNullable();
     table.string("name").notNullable();
     table.string("link").notNullable();
+    table.boolean("deleted").defaultTo(false);
   });
 }
 
