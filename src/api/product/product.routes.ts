@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addProduct,
+  deleteBatchProducts,
   getProductByAsinLocale,
   getProductBySeller,
   updateProduct,
@@ -22,6 +23,6 @@ router.get(
 );
 router.post("/", addProductValidator(), addProduct);
 router.put("/", addProductValidator(), updateProduct);
-// router.delete("/", deleteProductsValidator(), deleteProducts);
+router.delete("/", deleteProductsValidator(), deleteBatchProducts);
 
 export { router as productsRouter }; // or ES6

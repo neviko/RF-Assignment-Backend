@@ -1,13 +1,17 @@
 import { IProduct } from "../../common/interfaces/IProduct";
 import knex from "../../../db/db";
+import { IAsinLocale } from "../../common/interfaces/IAsinLocale";
 
 const tableName = "products";
+
 export const getAllAvailableBySeller = async (
   sellerName: string
 ): Promise<IProduct[]> => {
-  const products = (await knex(tableName)
-    .select("*")
-    .where({ seller_name: sellerName, available: true })) as IProduct[];
+  const products = (await knex(tableName).select("*").where({
+    seller_name: sellerName,
+    available: true,
+    deleted: false,
+  })) as IProduct[];
 
   return products;
 };
@@ -32,21 +36,22 @@ export const update = async (product: IProduct) => {
   }
 };
 
-export const deleteBatch = async (products: IProduct[]) => {
+export const deleteBatch = async (products: IAsinLocale[]) => {
   try {
     knex.transaction(async (trx) => {
       const queries: any = [];
-      products.forEach(async (product) => {
+      for (const product of products) {
         const query = await knex(tableName)
           .where({ asin: product.asin, locale: product.locale })
           .update({ deleted: true })
           .transacting(trx);
         queries.push(query);
-      });
+      }
+
       try {
         await Promise.all(queries);
       } catch (e) {
-        throw new Error();
+        throw new Error("Error while deleting items");
       }
     });
   } catch (e) {
@@ -76,7 +81,7 @@ export const getBySeller = async (
   try {
     const products = await knex(tableName)
       .select(["id", "asin", "locale", "price", "name", "link"])
-      .where({ seller_name: seller, availability: true });
+      .where({ seller_name: seller, availability: true, deleted: false });
     return products;
   } catch (e) {
     throw new Error("something went wrong while fetching products by seller");

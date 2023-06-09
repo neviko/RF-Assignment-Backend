@@ -9,6 +9,7 @@ import {
   getBySeller,
 } from "./product.service";
 import { IProduct } from "../../common/interfaces/IProduct";
+import { IAsinLocale } from "../../common/interfaces/IAsinLocale";
 
 export const getProducts = async (req: Request, res: Response) => {
   const products = await getAllAvailableBySeller(req.body.name);
@@ -61,7 +62,8 @@ export const updateProduct = async (req: Request, res: Response) => {
 };
 
 export const deleteBatchProducts = async (req: Request, res: Response) => {
-  const products = req.body as IProduct[];
+  const products = req.body.products as IAsinLocale[];
+  console.log(products);
   try {
     await deleteBatch(products);
     res.status(StatusCodes.CREATED).send({});

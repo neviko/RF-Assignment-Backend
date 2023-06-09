@@ -80,24 +80,13 @@ export const getProductByAsinLocaleValidator = () => {
 };
 
 export const deleteProductsValidator = () => {
-  interface IAsinLocale {
-    asin: string;
-    locale: string;
-  }
-
   return [
     body("products")
       .isArray({ min: 1 })
-      .withMessage("products have to be valid array")
-      .custom((products: IAsinLocale[]) => {
-        products.forEach((product) => {
-          if (!product.asin || !product.locale) {
-            throw new Error(
-              "products have to be valid array of pairs <asin,locale>"
-            );
-          }
-        });
-      }),
+      .withMessage("products have to be valid array"),
+    body("*.asin", "asin have to be valid"),
+    body("*.locale", "locale have to be valid"),
+
     (req: Request, res: Response, next: NextFunction) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
