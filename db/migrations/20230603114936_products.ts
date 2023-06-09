@@ -7,7 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string("asin").notNullable();
     table.string("locale").notNullable();
     table.string("seller_name").notNullable();
-    table.boolean("availability").notNullable();
+    table.boolean("availability").defaultTo(true);
     table.float("price").notNullable();
     table.string("name").notNullable();
     table.string("link").notNullable();

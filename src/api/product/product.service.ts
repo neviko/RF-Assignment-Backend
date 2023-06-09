@@ -14,9 +14,11 @@ export const getAllAvailableBySeller = async (
 
 export const add = async (product: IProduct) => {
   try {
-    return knex(tableName).insert(product);
+    return knex(tableName).insert(product).returning("*");
   } catch (e) {
-    console.error(`something went wrong while inserting a product\n ${e}`);
+    const text = `something went wrong while inserting a product\n ${e}`;
+    console.error(text);
+    throw new Error(text);
   }
 };
 
@@ -26,7 +28,7 @@ export const update = async (product: IProduct) => {
       .update(product)
       .where({ asin: product.asin, locale: product.locale });
   } catch (e) {
-    console.error(`something went wrong while updating a product\n ${e}`);
+    throw new Error(`something went wrong while updating a product\n ${e}`);
   }
 };
 
@@ -48,8 +50,7 @@ export const deleteBatch = async (products: IProduct[]) => {
       }
     });
   } catch (e) {
-    console.error(`something went wrong while updating a product\n ${e}`);
-    throw new Error();
+    throw new Error(`something went wrong while updating a product, ${e}`);
   }
 };
 
@@ -59,12 +60,25 @@ export const getByAsinLocale = async (
 ): Promise<IProduct | undefined> => {
   try {
     const products = await knex(tableName)
-      .select("*")
+      .select(["id", "asin", "locale", "price", "product_name", "product_link"])
       .where({ asin, locale })
       .limit(1);
     console.log(products);
     return products[0];
   } catch (e) {
-    console.error(`something went wrong while fetching a product\n ${e}`);
+    throw new Error(`something went wrong while fetching a product\n ${e}`);
+  }
+};
+
+export const getBySeller = async (
+  seller: string
+): Promise<IProduct[] | undefined> => {
+  try {
+    const products = await knex(tableName)
+      .select(["id", "asin", "locale", "price", "name", "link"])
+      .where({ seller_name: seller, availability: true });
+    return products;
+  } catch (e) {
+    throw new Error("something went wrong while fetching products by seller");
   }
 };

@@ -94,6 +94,24 @@ describe("update product suite", () => {
   });
 });
 
+describe("get seller product by seller_name - GET", () => {
+  it("should return seller products by seller name", async () => {
+    const newProduct = generateProduct();
+    const { seller_name } = newProduct;
+
+    const { body: product } = await request(app)
+      .post("/api/products")
+      .send(newProduct)
+      .expect(StatusCodes.CREATED);
+
+    const { body: fetchedProduct } = await request(app)
+      .get(`/api/products/seller/${seller_name}`)
+      .expect(StatusCodes.OK);
+
+    expect(product.id).toEqual(fetchedProduct.id);
+  });
+});
+
 // describe("delete product suite", () => {
 //   it("should delete products", async () => {
 //     const products: IProduct[] = [];

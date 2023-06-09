@@ -6,6 +6,7 @@ import {
   getAllAvailableBySeller,
   getByAsinLocale,
   deleteBatch,
+  getBySeller,
 } from "./product.service";
 import { IProduct } from "../../common/interfaces/IProduct";
 
@@ -16,10 +17,10 @@ export const getProducts = async (req: Request, res: Response) => {
 };
 
 export const addProduct = async (req: Request, res: Response) => {
-  const product: IProduct = req.body;
   try {
-    await add(product);
-    res.status(StatusCodes.CREATED).send(product);
+    const product: IProduct = req.body;
+    const createdProduct = await add(product);
+    res.status(StatusCodes.CREATED).send(createdProduct[0]);
   } catch (e) {
     res.status(StatusCodes.BAD_REQUEST);
   }
@@ -32,6 +33,16 @@ export const getProductByAsinLocale = async (req: Request, res: Response) => {
     res.status(StatusCodes.OK).send(product);
   } catch (e) {
     res.status(StatusCodes.BAD_REQUEST);
+  }
+};
+
+export const getProductBySeller = async (req: Request, res: Response) => {
+  const { seller } = req.params;
+  try {
+    const products = (await getBySeller(seller as string)) as IProduct[];
+    return res.status(StatusCodes.OK).send(products);
+  } catch (e: any) {
+    throw new Error(e.message);
   }
 };
 
