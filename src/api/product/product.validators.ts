@@ -6,40 +6,47 @@ export const addProductValidator = () => {
   return [
     body("asin")
       .isString()
-      .withMessage("name property have to be valid")
-      .notEmpty(),
+      .withMessage("asin property have to be valid")
+      .notEmpty()
+      .withMessage("asin property is empty"),
 
     body("locale")
       .isString()
-      .withMessage("id property have to be valid")
-      .notEmpty(),
+      .withMessage("locale property have to be valid")
+      .notEmpty()
+      .withMessage("locale property is empty"),
 
     body("seller_name")
       .isString()
-      .withMessage("author property have to be valid")
-      .notEmpty(),
+      .withMessage("seller_name property have to be valid")
+      .notEmpty()
+      .withMessage("seller_name property is empty"),
 
     body("availability")
       .isBoolean()
       .withMessage("availability property have to be valid")
       .notEmpty()
+      .withMessage("availability property is empty")
       .optional(),
 
     body("price")
       .isFloat({ min: 0, max: 9999999 })
       .withMessage("price property have to be valid")
-      .notEmpty(),
+      .notEmpty()
+      .withMessage("price property is empty"),
 
     body("name")
       .isString()
-      .withMessage("seller_name property have to be valid")
-      .notEmpty(),
+      .withMessage("name property have to be valid")
+      .notEmpty()
+      .withMessage("name property is empty"),
 
     body("link")
       .isString()
       .isURL()
       .withMessage("link property have to be valid")
-      .notEmpty(),
+      .notEmpty()
+      .withMessage("link property is empty"),
 
     (req: Request, res: Response, next: NextFunction) => {
       const errors = validationResult(req);
