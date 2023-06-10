@@ -64,12 +64,13 @@ export const getByAsinLocale = async (
   locale: string
 ): Promise<IProduct | undefined> => {
   try {
-    const products = await knex(tableName)
+    const product = await knex(tableName)
       .select(["id", "asin", "locale", "price", "product_name", "product_link"])
       .where({ asin, locale })
-      .limit(1);
-    console.log(products);
-    return products[0];
+      .limit(1)
+      .first();
+    console.log(product);
+    return product;
   } catch (e) {
     throw new Error(`something went wrong while fetching a product\n ${e}`);
   }
